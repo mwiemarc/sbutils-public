@@ -78,32 +78,32 @@ public class SbUtils implements ClientModInitializer {
                 MC.setScreen(ConfigGui.getModConfigScreen(MC.currentScreen));
             }
 
-            if (MC.getNetworkHandler() == null) {
+            if (MC.player == null) {
                 return;
             }
 
             while (islandKey.wasPressed()) {
-                MC.getNetworkHandler().sendChatCommand("is");
+                MC.player.sendCommand("is");
             }
 
             while (ehomeKey.wasPressed()) {
-                MC.getNetworkHandler().sendChatCommand("ehome");
+                MC.player.sendCommand("ehome");
             }
 
             while (jumpKey.wasPressed()) {
-                MC.getNetworkHandler().sendChatCommand("jump");
+                MC.player.sendCommand("jump");
             }
 
             while (backKey.wasPressed()) {
-                MC.getNetworkHandler().sendChatCommand("back");
+                MC.player.sendCommand("back");
             }
 
             while (craftKey.wasPressed()) {
-                MC.getNetworkHandler().sendChatCommand("wb");
+                MC.player.sendCommand("wb");
             }
 
             while (echestKey.wasPressed()) {
-                MC.getNetworkHandler().sendChatCommand("ec");
+                MC.player.sendCommand("ec");
             }
         });
     }

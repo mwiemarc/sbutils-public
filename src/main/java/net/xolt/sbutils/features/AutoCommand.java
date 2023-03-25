@@ -72,7 +72,7 @@ public class AutoCommand {
     }
 
     private static void sendCommand() {
-        if (MC.getNetworkHandler() == null) {
+        if (MC.player == null) {
             return;
         }
 
@@ -81,7 +81,7 @@ public class AutoCommand {
             command = command.substring(1);
         }
 
-        MC.getNetworkHandler().sendChatCommand(command);
+        MC.player.sendCommand(command);
         lastCmdSentAt = System.currentTimeMillis();
     }
 

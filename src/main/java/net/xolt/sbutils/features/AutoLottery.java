@@ -91,7 +91,7 @@ public class AutoLottery {
     }
 
     private static void buyTickets() {
-        if (MC.getNetworkHandler() == null) {
+        if (MC.player == null) {
             return;
         }
 
@@ -102,7 +102,7 @@ public class AutoLottery {
             return;
         }
 
-        MC.getNetworkHandler().sendChatCommand("lot buy " + numTickets);
+        MC.player.sendCommand("lot buy " + numTickets);
         waitingToBuy = false;
         Messenger.printMessage("message.sbutils.autoLottery.buying");
     }

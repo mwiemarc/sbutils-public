@@ -92,11 +92,11 @@ public class AutoReply {
     }
 
     private static void sendMessage() {
-        if (MC.getNetworkHandler() == null || msgQueue == null || msgQueue.size() == 0) {
+        if (MC.player == null || msgQueue == null || msgQueue.size() == 0) {
             return;
         }
 
-        MC.getNetworkHandler().sendChatCommand(msgQueue.poll());
+        MC.player.sendChatMessage(msgQueue.poll(), null);
         lastMsgSentAt = System.currentTimeMillis();
     }
 }

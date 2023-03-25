@@ -2,7 +2,7 @@ package net.xolt.sbutils.mixins;
 
 import net.minecraft.client.gui.screen.ingame.EnchantmentScreen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.Packet;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
 import net.minecraft.network.packet.s2c.play.*;
@@ -30,9 +30,11 @@ public class ClientPlayNetworkHandlerMixin {
         AutoCrate.onServerCloseScreen();
     }
 
-    @Inject(method = "onPlayerRemove", at = @At("TAIL"))
-    private void afterPlayerLeave(PlayerRemoveS2CPacket packet, CallbackInfo ci) {
-        StaffDetector.afterPlayerLeave();
+    @Inject(method = "onPlayerList", at = @At("TAIL"))
+    private void afterPlayerLeave(PlayerListS2CPacket packet, CallbackInfo ci) {
+        if (packet.getAction() == PlayerListS2CPacket.Action.REMOVE_PLAYER) {
+            StaffDetector.afterPlayerLeave();
+        }
     }
 
     @Inject(method = "onSignEditorOpen", at = @At("HEAD"), cancellable = true)

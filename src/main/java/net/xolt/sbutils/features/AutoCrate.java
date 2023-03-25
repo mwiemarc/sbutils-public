@@ -21,6 +21,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.xolt.sbutils.config.ModConfig;
 import net.xolt.sbutils.util.InvUtils;
 import net.xolt.sbutils.util.Messenger;
@@ -233,7 +234,7 @@ public class AutoCrate {
         if (cratePos == null || MC.interactionManager == null) {
             return false;
         }
-        MC.interactionManager.interactBlock(MC.player, Hand.MAIN_HAND, new BlockHitResult(cratePos.toCenterPos(), Direction.UP, cratePos, false));
+        MC.interactionManager.interactBlock(MC.player, Hand.MAIN_HAND, new BlockHitResult(Vec3d.ofCenter(cratePos), Direction.UP, cratePos, false));
         return true;
     }
 

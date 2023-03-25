@@ -91,6 +91,6 @@ public class ChatAppend {
             message = message + ModConfig.INSTANCE.getConfig().chatSuffix;
         }
 
-        return new ChatMessageC2SPacket(message, packet.timestamp(), packet.salt(), packet.signature(), packet.acknowledgment());
+        return new ChatMessageC2SPacket(message, packet.timestamp(), packet.salt(), packet.signature(), packet.signedPreview(), packet.acknowledgment());
     }
 }

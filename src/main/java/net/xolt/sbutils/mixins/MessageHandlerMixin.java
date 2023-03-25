@@ -1,6 +1,5 @@
 package net.xolt.sbutils.mixins;
 
-import com.mojang.authlib.GameProfile;
 import net.minecraft.client.network.message.MessageHandler;
 import net.minecraft.network.message.MessageType;
 import net.minecraft.network.message.SignedMessage;
@@ -15,17 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MessageHandlerMixin {
 
     @Inject(method = "onChatMessage", at = @At("HEAD"), cancellable = true)
-    private void onChatMessage(SignedMessage message, GameProfile sender, MessageType.Parameters params, CallbackInfo ci) {
+    private void onChatMessage(SignedMessage message, MessageType.Parameters params, CallbackInfo ci) {
         Text text = params.applyChatDecoration(message.getContent());
-        onMessage(text);
-        if (ChatFilters.shouldFilter(text)) {
-            ci.cancel();
-        }
-    }
-
-    @Inject(method = "onProfilelessMessage", at = @At("HEAD"), cancellable = true)
-    private void onProfilelessMessage(Text content, MessageType.Parameters params, CallbackInfo ci) {
-        Text text = params.applyChatDecoration(content);
         onMessage(text);
         if (ChatFilters.shouldFilter(text)) {
             ci.cancel();

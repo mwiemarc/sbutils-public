@@ -292,11 +292,11 @@ public class AutoFix {
     }
 
     private static void sendFixCommand() {
-        if (MC.getNetworkHandler() == null) {
+        if (MC.player == null) {
             return;
         }
         String command = ModConfig.INSTANCE.getConfig().autoFixMode == ModConfig.FixMode.HAND ? "fix" : "fix all";
-        MC.getNetworkHandler().sendChatCommand(command);
+        MC.player.sendCommand(command);
     }
 
     private static void returnAndSwapBack() {

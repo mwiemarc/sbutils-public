@@ -12,9 +12,9 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.registry.Registry;
 import net.xolt.sbutils.config.ModConfig;
 import net.xolt.sbutils.util.InvUtils;
 import net.xolt.sbutils.util.Messenger;
@@ -352,7 +352,7 @@ public class EnchantAll {
 
         List<Enchantment> enchantments = new ArrayList<>();
         if (!unenchant) {
-            for (Enchantment enchantment : Registries.ENCHANTMENT) {
+            for (Enchantment enchantment : Registry.ENCHANTMENT) {
                 if (enchantment.isAcceptableItem(new ItemStack(item))) {
                     enchantments.add(enchantment);
                 }
@@ -386,8 +386,12 @@ public class EnchantAll {
     }
 
     private static void sendEnchantCommand(Enchantment enchantment, boolean unenchant) {
-        String enchantName = Registries.ENCHANTMENT.getId(enchantment).getPath().replaceAll("_", "");
-        MC.getNetworkHandler().sendChatCommand("enchant " + enchantName + " " + (unenchant ? 0 : enchantment.getMaxLevel()));
+        if (MC.player == null) {
+            return;
+        }
+
+        String enchantName = Registry.ENCHANTMENT.getId(enchantment).getPath().replaceAll("_", "");
+        MC.player.sendCommand("enchant " + enchantName + " " + (unenchant ? 0 : enchantment.getMaxLevel()));
     }
 
     private static ItemStack getNextItem() {

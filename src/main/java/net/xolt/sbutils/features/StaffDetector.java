@@ -74,7 +74,7 @@ public class StaffDetector {
 
         Messenger.printStaffNotification(player, true);
         if (ModConfig.INSTANCE.getConfig().staffSound) {
-            MC.player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BIT.value(), 1, 1);
+            MC.player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BIT, 1, 1);
         }
     }
 
@@ -93,7 +93,7 @@ public class StaffDetector {
         checkForNoStaff = true;
 
         if (ModConfig.INSTANCE.getConfig().staffSound) {
-            MC.player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BIT.value(), 1, 1);
+            MC.player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BIT, 1, 1);
         }
     }
 

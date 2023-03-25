@@ -376,7 +376,11 @@ public class AutoAdvert {
     }
 
     private static void sendAd() {
-        MC.getNetworkHandler().sendChatMessage(prevAdList.get(adIndex));
+        if (MC.player == null) {
+            return;
+        }
+
+        MC.player.sendChatMessage(prevAdList.get(adIndex), null);
     }
 
     private static int delayLeft() {

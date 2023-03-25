@@ -16,11 +16,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.EnchantmentScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryEntry;
 import net.xolt.sbutils.config.ModConfig;
 import net.xolt.sbutils.util.Messenger;
 
@@ -290,7 +290,7 @@ public class AutoSilk {
         int[] enchantments = screenHandler.enchantmentId;
         int buttonIndex = book ? 0 : -1;
         for (int i = 0; i < enchantments.length; i++) {
-            Optional<RegistryEntry.Reference<Enchantment>> optionalEnchantment = Registries.ENCHANTMENT.getEntry(enchantments[i]);
+            Optional<RegistryEntry<Enchantment>> optionalEnchantment = Registry.ENCHANTMENT.getEntry(enchantments[i]);
             if (!optionalEnchantment.isPresent()) {
                 continue;
             }
