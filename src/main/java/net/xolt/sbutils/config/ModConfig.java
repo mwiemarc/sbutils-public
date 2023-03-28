@@ -3,8 +3,11 @@ package net.xolt.sbutils.config;
 import dev.isxander.yacl.api.NameableEnum;
 import dev.isxander.yacl.config.ConfigEntry;
 import dev.isxander.yacl.config.ConfigInstance;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.StringIdentifiable;
 import net.xolt.sbutils.util.LimitedList;
 
 import java.nio.file.Path;
@@ -45,6 +48,7 @@ public class ModConfig {
     // Mentions Settings
 
     @ConfigEntry public boolean mentions = false;
+    @ConfigEntry public NotifSound mentionSound = NotifSound.EXPERIENCE;
     @ConfigEntry public boolean mentionsCurrentAccount = true;
     @ConfigEntry public List<String> mentionsAliases = List.of();
 
@@ -113,6 +117,12 @@ public class ModConfig {
     @ConfigEntry public int toolSaverDurability = 20;
 
 
+    // Anti Place Settings
+
+    @ConfigEntry public boolean antiPlaceHeads = false;
+    @ConfigEntry public boolean antiPlaceGrass = false;
+
+
     // Auto Command Settings
 
     @ConfigEntry public boolean autoCommandEnabled = false;
@@ -158,7 +168,8 @@ public class ModConfig {
 
     @ConfigEntry public boolean detectStaffJoin = false;
     @ConfigEntry public boolean detectStaffLeave = false;
-    @ConfigEntry public boolean staffSound = false;
+    @ConfigEntry public boolean playStaffSound = false;
+    @ConfigEntry public NotifSound staffDetectSound = NotifSound.BIT;
 
 
     public enum Color implements NameableEnum {
@@ -223,6 +234,50 @@ public class ModConfig {
 
         public Text getDisplayName() {
             return Text.translatable(name);
+        }
+    }
+
+    public enum NotifSound implements NameableEnum, StringIdentifiable {
+        EXPERIENCE(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP.getId().toShortTranslationKey(), SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP),
+        LAY_EGG(SoundEvents.ENTITY_CHICKEN_EGG.getId().toShortTranslationKey(), SoundEvents.ENTITY_CHICKEN_EGG),
+        DISPENSER(SoundEvents.BLOCK_DISPENSER_FAIL.getId().toShortTranslationKey(), SoundEvents.BLOCK_DISPENSER_FAIL),
+        BUTTON(SoundEvents.BLOCK_STONE_BUTTON_CLICK_ON.getId().toShortTranslationKey(), SoundEvents.BLOCK_STONE_BUTTON_CLICK_ON),
+        ANVIL_LAND(SoundEvents.BLOCK_ANVIL_LAND.getId().toShortTranslationKey(), SoundEvents.BLOCK_ANVIL_LAND),
+        BANJO(SoundEvents.BLOCK_NOTE_BLOCK_BANJO.getId().toShortTranslationKey(), SoundEvents.BLOCK_NOTE_BLOCK_BANJO),
+        BASEDRUM(SoundEvents.BLOCK_NOTE_BLOCK_BASEDRUM.getId().toShortTranslationKey(), SoundEvents.BLOCK_NOTE_BLOCK_BASEDRUM),
+        BASS(SoundEvents.BLOCK_NOTE_BLOCK_BASS.getId().toShortTranslationKey(), SoundEvents.BLOCK_NOTE_BLOCK_BASS),
+        BELL(SoundEvents.BLOCK_NOTE_BLOCK_BELL.getId().toShortTranslationKey(), SoundEvents.BLOCK_NOTE_BLOCK_BELL),
+        BIT(SoundEvents.BLOCK_NOTE_BLOCK_BIT.getId().toShortTranslationKey(), SoundEvents.BLOCK_NOTE_BLOCK_BIT),
+        CHIME(SoundEvents.BLOCK_NOTE_BLOCK_CHIME.getId().toShortTranslationKey(), SoundEvents.BLOCK_NOTE_BLOCK_CHIME),
+        COW_BELL(SoundEvents.BLOCK_NOTE_BLOCK_COW_BELL.getId().toShortTranslationKey(), SoundEvents.BLOCK_NOTE_BLOCK_COW_BELL),
+        DIDGERIDOO(SoundEvents.BLOCK_NOTE_BLOCK_DIDGERIDOO.getId().toShortTranslationKey(), SoundEvents.BLOCK_NOTE_BLOCK_DIDGERIDOO),
+        FLUTE(SoundEvents.BLOCK_NOTE_BLOCK_FLUTE.getId().toShortTranslationKey(), SoundEvents.BLOCK_NOTE_BLOCK_FLUTE),
+        GUITAR(SoundEvents.BLOCK_NOTE_BLOCK_GUITAR.getId().toShortTranslationKey(), SoundEvents.BLOCK_NOTE_BLOCK_GUITAR),
+        HARP(SoundEvents.BLOCK_NOTE_BLOCK_HARP.getId().toShortTranslationKey(), SoundEvents.BLOCK_NOTE_BLOCK_HARP),
+        HAT(SoundEvents.BLOCK_NOTE_BLOCK_HAT.getId().toShortTranslationKey(), SoundEvents.BLOCK_NOTE_BLOCK_HAT),
+        IRON_XYLOPHONE(SoundEvents.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE.getId().toShortTranslationKey(), SoundEvents.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE),
+        PLING(SoundEvents.BLOCK_NOTE_BLOCK_PLING.getId().toShortTranslationKey(), SoundEvents.BLOCK_NOTE_BLOCK_PLING),
+        SNARE(SoundEvents.BLOCK_NOTE_BLOCK_SNARE.getId().toShortTranslationKey(), SoundEvents.BLOCK_NOTE_BLOCK_SNARE),
+        XYLOPHONE(SoundEvents.BLOCK_NOTE_BLOCK_XYLOPHONE.getId().toShortTranslationKey(), SoundEvents.BLOCK_NOTE_BLOCK_XYLOPHONE);
+
+        private final String name;
+        private final SoundEvent sound;
+
+        NotifSound(String name, SoundEvent sound) {
+            this.name = name;
+            this.sound = sound;
+        }
+
+        public String asString() {
+            return name;
+        }
+
+        public Text getDisplayName() {
+            return Text.translatable(name);
+        }
+
+        public SoundEvent getSound() {
+            return sound;
         }
     }
 }
