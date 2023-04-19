@@ -2,21 +2,30 @@ package net.xolt.sbutils.mixins;
 
 import net.minecraft.client.gui.screen.ingame.EnchantmentScreen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
 import net.minecraft.network.packet.s2c.play.*;
 import net.xolt.sbutils.features.*;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+
+import java.util.Iterator;
+import java.util.UUID;
 
 import static net.xolt.sbutils.SbUtils.MC;
 
 @Mixin(ClientPlayNetworkHandler.class)
-public class ClientPlayNetworkHandlerMixin {
+public abstract class ClientPlayNetworkHandlerMixin {
+
+    @Shadow @Nullable public abstract PlayerListEntry getPlayerListEntry(UUID uuid);
 
     @Inject(method = "onGameJoin", at = @At("TAIL"))
     private void onGameJoin(GameJoinS2CPacket packet, CallbackInfo ci) {
@@ -30,8 +39,18 @@ public class ClientPlayNetworkHandlerMixin {
         AutoCrate.onServerCloseScreen();
     }
 
+    @Inject(method = "onPlayerList", at = @At(value = "INVOKE", target = "Ljava/util/Map;remove(Ljava/lang/Object;)Ljava/lang/Object;", shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILSOFT)
+    private void onPlayerLeave(PlayerListS2CPacket packet, CallbackInfo ci, Iterator var2, PlayerListS2CPacket.Entry entry) {
+        StaffDetector.onPlayerLeave(getPlayerListEntry(entry.getProfile().getId()));
+    }
+
+    @Inject(method = "onPlayerList", at = @At(value = "INVOKE", target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"), locals = LocalCapture.CAPTURE_FAILSOFT)
+    private void onPlayerJoin(PlayerListS2CPacket packet, CallbackInfo ci, Iterator var2, PlayerListS2CPacket.Entry entry, PlayerListEntry playerListEntry, boolean bl) {
+        StaffDetector.onPlayerJoin(playerListEntry);
+    }
+
     @Inject(method = "onPlayerList", at = @At("TAIL"))
-    private void afterPlayerLeave(PlayerListS2CPacket packet, CallbackInfo ci) {
+    private void onPlayerListTail(PlayerListS2CPacket packet, CallbackInfo ci) {
         if (packet.getAction() == PlayerListS2CPacket.Action.REMOVE_PLAYER) {
             StaffDetector.afterPlayerLeave();
         }

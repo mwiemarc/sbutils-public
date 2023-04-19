@@ -80,7 +80,7 @@ public class StaffDetector {
     }
 
     public static void onPlayerJoin(PlayerListEntry player) {
-        if (!ModConfig.INSTANCE.getConfig().detectStaffJoin || player == null || !isStaff(player)) {
+        if (!ModConfig.INSTANCE.getConfig().detectStaffJoin || !isStaff(player)) {
             return;
         }
 
@@ -91,17 +91,16 @@ public class StaffDetector {
         }
     }
 
-    public static void onPlayerLeave(UUID uuid) {
-        if (!ModConfig.INSTANCE.getConfig().detectStaffLeave || uuid == null || MC.getNetworkHandler() == null) {
-            return;
-        }
-
-        PlayerListEntry player = MC.getNetworkHandler().getPlayerListEntry(uuid);
-        if (player == null || !isStaff(player)) {
+    public static void onPlayerLeave(PlayerListEntry player) {
+        if (!ModConfig.INSTANCE.getConfig().detectStaffLeave || !isStaff(player)) {
             return;
         }
 
         Messenger.printStaffNotification(player, false);
+
+        if (!staffOnline()) {
+            Messenger.printMessage("message.sbutils.staffDetector.noStaff");
+        }
 
         checkForNoStaff = true;
 
@@ -118,6 +117,7 @@ public class StaffDetector {
         if (!staffOnline()) {
             Messenger.printMessage("message.sbutils.staffDetector.noStaff");
         }
+
         checkForNoStaff = false;
     }
 
@@ -137,11 +137,16 @@ public class StaffDetector {
     }
 
     public static boolean staffOnline() {
+        if (MC.getNetworkHandler() == null) {
+            return false;
+        }
+
         for (PlayerListEntry playerListEntry : MC.getNetworkHandler().getPlayerList()) {
             if (isStaff(playerListEntry)) {
                 return true;
             }
         }
+
         return false;
     }
 }
