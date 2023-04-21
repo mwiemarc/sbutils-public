@@ -41,7 +41,7 @@ public class MessageHandlerMixin {
     private static void preFilterMessage(Text message) {
         ChatLogger.processMessage(message);
         AutoFix.processMessage(message);
-        AutoLottery.processMessage(message);
+        AutoRaffle.processMessage(message);
         AutoReply.processMessage(message);
     }
 
