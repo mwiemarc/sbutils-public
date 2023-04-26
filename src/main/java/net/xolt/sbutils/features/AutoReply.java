@@ -96,7 +96,7 @@ public class AutoReply {
             return;
         }
 
-        MC.player.sendChatMessage(msgQueue.poll(), null);
+        MC.player.sendCommand(msgQueue.poll(), null);
         lastMsgSentAt = System.currentTimeMillis();
     }
 }
