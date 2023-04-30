@@ -6,11 +6,10 @@ import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
-import net.minecraft.network.packet.c2s.play.PlayerInputC2SPacket;
 import net.minecraft.network.packet.s2c.play.*;
-import net.xolt.sbutils.config.ModConfig;
 import net.xolt.sbutils.features.*;
 import org.jetbrains.annotations.Nullable;
+import net.xolt.sbutils.features.common.ServerDetector;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,14 +30,9 @@ public abstract class ClientPlayNetworkHandlerMixin {
 
     @Inject(method = "onGameJoin", at = @At("TAIL"))
     private void onGameJoin(GameJoinS2CPacket packet, CallbackInfo ci) {
+        ServerDetector.onJoinGame();
         JoinCommands.onJoinGame();
-        AutoAdvert.onJoinGame();
         AutoRaffle.onJoinGame();
-    }
-
-    @Inject(method = "onCloseScreen", at = @At("HEAD"))
-    private void onCloseScreen(CloseScreenS2CPacket packet, CallbackInfo ci) {
-        AutoCrate.onServerCloseScreen();
     }
 
     @Inject(method = "onPlayerList", at = @At(value = "INVOKE", target = "Ljava/util/Map;remove(Ljava/lang/Object;)Ljava/lang/Object;", shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILSOFT)
