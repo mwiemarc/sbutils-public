@@ -45,6 +45,7 @@ public class MessageHandlerMixin {
         AutoFix.processMessage(message);
         AutoRaffle.processMessage(message);
         AutoReply.processMessage(message);
+        EnchantAll.processMessage(message);
     }
 
     private static void postFilterMessage(Text message) {
