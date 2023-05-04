@@ -39,6 +39,7 @@ public class EnchantAll {
     private static boolean unenchanting;
     private static boolean inventory;
     private static boolean awaitingResponse;
+    private static boolean noPermission;
     private static boolean pause;
     private static boolean cooldown;
     private static int prevSelectedSlot;
@@ -200,6 +201,15 @@ public class EnchantAll {
             return Command.SINGLE_SUCCESS;
         }
 
+        if (done()) {
+            if (inv) {
+                Messenger.printMessage("message.sbutils.enchantAll.noEnchantableItems", Formatting.RED);
+            } else {
+                Messenger.printMessage("message.sbutils.enchantAll.itemNotEnchantable", Formatting.RED);
+            }
+            return Command.SINGLE_SUCCESS;
+        }
+
         enchanting = !unenchant;
         unenchanting = unenchant;
         prevSelectedSlot = MC.player.getInventory().selectedSlot;
@@ -210,6 +220,16 @@ public class EnchantAll {
 
     public static void tick() {
         if ((!enchanting && !unenchanting) || awaitingResponse || MC.player == null) {
+            return;
+        }
+
+        if (noPermission) {
+            if (ModConfig.INSTANCE.getConfig().enchantMode == ModConfig.EnchantMode.ALL && enchanting) {
+                Messenger.printMessage("message.sbutils.enchantAll.noEnchantAllPermission", Formatting.RED);
+            } else {
+                Messenger.printMessage("message.sbutils.enchantAll.noEnchantPermission", Formatting.RED);
+            }
+            reset();
             return;
         }
 
@@ -253,7 +273,7 @@ public class EnchantAll {
     }
 
     public static void processMessage(Text message) {
-        if (!enchanting && !unenchanting) {
+        if ((!enchanting && !unenchanting) || !awaitingResponse) {
             return;
         }
 
@@ -262,6 +282,9 @@ public class EnchantAll {
                 RegexFilters.enchantAllSuccess.matcher(messageString).matches() ||
                 RegexFilters.unenchantSuccess.matcher(messageString).matches() ||
                 RegexFilters.enchantError.matcher(messageString).matches()) {
+            awaitingResponse = false;
+        } else if (RegexFilters.enchantNoPermission.matcher(messageString).matches()) {
+            noPermission = true;
             awaitingResponse = false;
         }
     }
@@ -274,8 +297,6 @@ public class EnchantAll {
         ItemStack hand = MC.player.getMainHandStack();
 
         if (!hand.getItem().isEnchantable(hand)) {
-            Messenger.printMessage("message.sbutils.enchantAll.cantEnchantItem");
-            reset();
             return;
         }
 
@@ -446,6 +467,7 @@ public class EnchantAll {
         unenchanting = false;
         inventory = false;
         awaitingResponse = false;
+        noPermission = false;
         pause = false;
         cooldown = false;
         prevSelectedSlot = -1;
