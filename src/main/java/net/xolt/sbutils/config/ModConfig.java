@@ -318,7 +318,8 @@ public class ModConfig {
         DIAMOND_AXE(Items.DIAMOND_AXE),
         DIAMOND_SHOVEL(Items.DIAMOND_SHOVEL),
         DIAMOND_HOE(Items.DIAMOND_HOE),
-        SHEARS(Items.SHEARS);
+        SHEARS(Items.SHEARS),
+        BOOK(Items.BOOK);
 
         private final Item tool;
 
